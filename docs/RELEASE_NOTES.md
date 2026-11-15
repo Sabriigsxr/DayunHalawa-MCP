@@ -42,3 +42,9 @@ security contact.
 - [ ] Maintainer confirms licensing and dataset rights.
 - [ ] Maintainer performs a clean-machine install.
 - [ ] Maintainer tags and publishes only after explicit approval.
+
+---
+
+RIFT · Red-team Intelligence & Fusion Toolkit ·
+[Documentation index](README.md) · [GitHub](https://github.com/Sabriigsxr/RIFT) ·
+[Ethical use](ETHICAL_USE.md) · [Security](SECURITY.md)

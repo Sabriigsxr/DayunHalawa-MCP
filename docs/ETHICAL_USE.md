@@ -14,3 +14,9 @@ endorsement, validation, or authorization.
 No license has been selected for this repository. Until licensing and dataset
 rights are explicitly established, treat all project and bundled data rights
 as reserved.
+
+---
+
+RIFT · Red-team Intelligence & Fusion Toolkit ·
+[Documentation index](README.md) · [GitHub](https://github.com/Sabriigsxr/RIFT) ·
+[Ethical use](ETHICAL_USE.md) · [Security](SECURITY.md)

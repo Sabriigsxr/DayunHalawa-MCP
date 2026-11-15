@@ -21,3 +21,9 @@ operation.
 **HTTP client cannot connect:** confirm the process is running, the client
 uses `/mcp`, and the configured host and port match. Keep the host on
 `127.0.0.1` unless a protected deployment boundary is intentional.
+
+---
+
+RIFT · Red-team Intelligence & Fusion Toolkit ·
+[Documentation index](README.md) · [GitHub](https://github.com/Sabriigsxr/RIFT) ·
+[Ethical use](ETHICAL_USE.md) · [Security](SECURITY.md)
