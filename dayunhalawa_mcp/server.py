@@ -2,7 +2,7 @@
 """RIFT MCP server.
 
 Exposes the local pentesting / DFIR / offensive-scenario Q&A knowledge base
-to MCP clients (OpenCode, Claude Desktop, Cursor, etc.).
+to MCP clients (OpenCode, Claude Desktop, and other MCP-capable clients).
 
 Retrieval-only (extractive): no LLM generation, no external API keys required.
 Educational / authorized use only — see WARNING.txt.

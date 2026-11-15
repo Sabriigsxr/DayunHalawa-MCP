@@ -73,8 +73,8 @@ class Engine:
             if not p.exists():
                 raise FileNotFoundError(
                     f"Index file missing: {p}. Expected faiss.index, documents.jsonl "
-                    f"and metadata.jsonl in DAYUNHALAWA_INDEX_DIR (current: {self.index_dir}). "
-                    "See README.md#building-the-index."
+                    f"and metadata.jsonl in RIFT_INDEX_DIR (legacy DAYUNHALAWA_INDEX_DIR; current: {self.index_dir}). "
+                    "See docs/TROUBLESHOOTING.md."
                 )
 
         self.index = faiss.read_index(str(faiss_path))
