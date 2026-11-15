@@ -11,5 +11,6 @@
 - Added documentation, security policy, contribution guidance, CI, tests, and
   migration notes.
 - Hardened archive restoration against traversal entries and partial writes.
+- Added Egyptian-built branding and developer attribution (Ahmed Sabry — Cyber Security Researcher), including shields.io provenance badges and credits in README and WARNING.txt.
 
 No release has been published.

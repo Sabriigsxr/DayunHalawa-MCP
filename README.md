@@ -6,6 +6,11 @@
 retrieval, FAISS, and RAG.**
 
 [![CI](https://github.com/Sabriigsxr/RIFT/actions/workflows/ci.yml/badge.svg)](https://github.com/Sabriigsxr/RIFT/actions/workflows/ci.yml)
+[![Made in Egypt](https://img.shields.io/badge/Made%20in-Egypt%20🇪🇬-d7193f)](https://github.com/Sabriigsxr/RIFT)
+[![Developer](https://img.shields.io/badge/Developer-Ahmed%20Sabry-090a0d?logo=github&logoColor=white)](https://github.com/Sabriigsxr/RIFT)
+
+🇪🇬 **Proudly built in Egypt** by **Ahmed Sabry ([Sabriigsxr](https://github.com/Sabriigsxr))**,
+Cyber Security Researcher.
 
 RIFT is a local-first Model Context Protocol (MCP) server for authorized
 penetration testing, detection engineering, DFIR, cybersecurity education,
@@ -194,6 +199,15 @@ Migration and release preparation details are in
 - Broader integrity and compatibility coverage across MCP SDK major versions.
 - Optional retrieval evaluation sets for recall and ranking regression checks.
 - Maintainer-reviewed dataset governance and contribution workflow.
+
+## Made in Egypt — Developer
+
+**Ahmed Sabry ([Sabriigsxr](https://github.com/Sabriigsxr))** — Cyber Security Researcher
+
+RIFT is an Egyptian-built open-source security research tool, made with 🇪🇬 for the
+authorized offensive-security and detection-engineering community. Every retrieval,
+document, and test in this toolkit was engineered locally to demonstrate that world-class
+security tooling can come from Egypt.
 
 ## Status, license, and acknowledgments
 
