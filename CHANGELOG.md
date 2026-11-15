@@ -1,16 +1,19 @@
 # Changelog
 
-## Unreleased — RIFT 2.0.0 migration
+## 2.0.0 — Initial public RIFT release
 
-- Rebranded the project as RIFT — Red-team Intelligence & Fusion Toolkit.
-- Added `rift` and retained `dayunhalawa-mcp` as a compatibility command.
-- Added `RIFT_INDEX_DIR` and `RIFT_MODEL` with legacy environment aliases.
-- Added fail-closed JSONL, alignment, and embedding-dimension validation.
-- Preserved the original tools, prompt, import path, bundled archive, and
-  checksum.
-- Added documentation, security policy, contribution guidance, CI, tests, and
-  migration notes.
-- Hardened archive restoration against traversal entries and partial writes.
-- Added Egyptian-built branding and developer attribution (Ahmed Sabry — Cyber Security Researcher), including shields.io provenance badges and credits in README and WARNING.txt.
+- **RIFT — Red-team Intelligence & Fusion Toolkit.** MCP-powered offensive
+  security intelligence engine using local semantic retrieval (FAISS +
+  Sentence Transformers).
+- MCP server exposing `search_offensive_scenarios`, `ask_offensive_scenario`,
+  and `index_stats`, plus the `offensive_scenario_brief` prompt.
+- stdio transport by default; streamable HTTP on localhost (`--transport http`).
+- Bundled 23,737-entry offensive-security Q&A knowledge base, SHA-256-verified
+  and alignment-checked before use.
+- Made in Egypt 🇪🇬 — Ahmed Sabry, Cyber Security Researcher.
+- Offline query operation once the embedding model is cached.
+- Only authorized defensive/educational use is permitted; see WARNING.txt.
 
-No release has been published.
+No prior code history is carried forward.
+
+No license has been selected yet.

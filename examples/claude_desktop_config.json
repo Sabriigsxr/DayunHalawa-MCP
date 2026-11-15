@@ -2,7 +2,7 @@
   "mcpServers": {
     "rift": {
       "command": "/absolute/path/to/RIFT/.venv/bin/python",
-      "args": ["-m", "dayunhalawa_mcp"],
+      "args": ["-m", "rift_mcp"],
       "env": {
         "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index",
         "HF_HUB_OFFLINE": "1",

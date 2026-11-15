@@ -1,14 +1,13 @@
 # MCP integration
 
-RIFT retains the original import path and tool names for compatibility while
-adding the `rift` console command and branding. The registered tools are:
+RIFT provides three registered tools:
 
 - `search_offensive_scenarios(query, top_k=5, threshold=0.25)`
 - `ask_offensive_scenario(question, top_k=5, threshold=0.25)`
 - `index_stats()`
 
-The registered prompt is `offensive_scenario_brief(topic)`. The original
-server registered no MCP resources.
+The registered prompt is `offensive_scenario_brief(topic)`. RIFT registers no
+MCP resources.
 
 ## Claude Desktop
 
@@ -17,7 +16,7 @@ server registered no MCP resources.
   "mcpServers": {
     "rift": {
       "command": "/absolute/path/to/RIFT/.venv/bin/python",
-      "args": ["-m", "dayunhalawa_mcp"],
+      "args": ["-m", "rift_mcp"],
       "env": {
         "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index",
         "HF_HUB_OFFLINE": "1",
@@ -28,9 +27,6 @@ server registered no MCP resources.
 }
 ```
 
-Existing configurations using the key `dayunhalawa-mcp` and legacy
-environment variables remain valid.
-
 ## OpenCode
 
 ```jsonc
@@ -39,7 +35,7 @@ environment variables remain valid.
     "rift": {
       "type": "local",
       "enabled": true,
-      "command": ["/absolute/path/to/RIFT/.venv/bin/python", "-m", "dayunhalawa_mcp"],
+      "command": ["/absolute/path/to/RIFT/.venv/bin/python", "-m", "rift_mcp"],
       "environment": {
         "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index"
       }

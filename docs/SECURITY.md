@@ -9,7 +9,6 @@ Security properties:
 - Query-time retrieval opens the index read-only.
 - Input JSONL, IDs, counts, and embedding dimensions are validated.
 - Archive members are checked before extraction.
-- Legacy names are compatibility aliases, not separate network services.
 
 The HTTP transport is unauthenticated. Do not bind it to a public interface
 without putting it behind authentication, authorization, network controls,

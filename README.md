@@ -28,11 +28,11 @@ commands, or require a paid API.
   the model and index are installed.
 - **MCP-native:** stdio is the default for desktop and coding clients, with
   streamable HTTP available on localhost.
+- **Verified at load:** the FAISS index, metadata, and documents are
+  alignment- and dimension-checked before RIFT answers a single query; the
+  bundled index ships with a SHA-256 checksum.
 - **Extractive and inspectable:** results include IDs, scores, metadata, and
   source Q&A rather than silently generated claims.
-- **Preserves the original project:** the `dayunhalawa_mcp` import path,
-  legacy CLI, environment variables, tools, prompt, and bundled index remain
-  compatible.
 
 ## Architecture
 
@@ -61,8 +61,8 @@ scoring details.
 | `index_stats` | Vector, document, dimension, model, and path information |
 | `offensive_scenario_brief` | Prompt template for a grounded research briefing |
 
-The original project registered no MCP resources. Tool names remain unchanged
-for compatibility.
+Tools only — no MCP resources — by design. Tool names are stable for
+client configurations.
 
 ## Installation
 
@@ -74,9 +74,9 @@ python3 -m venv .venv
 bash scripts/restore_index.sh
 ```
 
-The archive is preserved from the original project, verified by SHA-256, and
-restored to the git-ignored `index/` directory. It contains 23,737 document
-and metadata records. RIFT does not automatically regenerate or replace it.
+The bundled archive is verified by SHA-256 and restored to the git-ignored
+`index/` directory. It contains 23,737 document and metadata records. RIFT
+does not automatically regenerate or replace it.
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) and
 [`docs/DATASET.md`](docs/DATASET.md).
 
@@ -86,8 +86,6 @@ stdio is the default transport:
 
 ```bash
 .venv/bin/rift
-# Legacy equivalent:
-.venv/bin/dayunhalawa-mcp
 ```
 
 For a local streamable HTTP endpoint:
@@ -103,8 +101,7 @@ operation.
 
 ## Configuration
 
-Preferred variables are `RIFT_INDEX_DIR` and `RIFT_MODEL`. The original
-`DAYUNHALAWA_INDEX_DIR` and `DAYUNHALAWA_MODEL` names remain supported.
+Configuration variables are `RIFT_INDEX_DIR` and `RIFT_MODEL`.
 
 ```bash
 export RIFT_INDEX_DIR="$PWD/index"
@@ -123,7 +120,7 @@ exposure guidance are in [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md).
   "mcpServers": {
     "rift": {
       "command": "/absolute/path/to/RIFT/.venv/bin/python",
-      "args": ["-m", "dayunhalawa_mcp"],
+      "args": ["-m", "rift_mcp"],
       "env": {
         "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index"
       }
@@ -140,7 +137,7 @@ exposure guidance are in [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md).
     "rift": {
       "type": "local",
       "enabled": true,
-      "command": ["/absolute/path/to/RIFT/.venv/bin/python", "-m", "dayunhalawa_mcp"],
+      "command": ["/absolute/path/to/RIFT/.venv/bin/python", "-m", "rift_mcp"],
       "environment": {
         "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index"
       }
@@ -149,8 +146,7 @@ exposure guidance are in [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md).
 }
 ```
 
-Existing configurations keyed as `dayunhalawa-mcp` continue to work. No
-additional client is claimed without a verified integration.
+No additional client is claimed without a verified integration.
 
 ## Rebuild an index
 
@@ -182,15 +178,11 @@ Read [`docs/SECURITY.md`](docs/SECURITY.md) and
 .venv/bin/pip install -e '.[dev]'
 .venv/bin/pytest
 .venv/bin/ruff check .
-python -m compileall -q dayunhalawa_mcp scripts
+python -m compileall -q rift_mcp scripts tests
 ```
 
-See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md),
-[`CONTRIBUTING.md`](CONTRIBUTING.md), and
-[`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md).
-
-Migration and release preparation details are in
-[`docs/MIGRATION.md`](docs/MIGRATION.md) and
+See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) and
+[`CONTRIBUTING.md`](CONTRIBUTING.md). Release preparation details are in
 [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ## Roadmap
@@ -211,10 +203,11 @@ security tooling can come from Egypt.
 
 ## Status, license, and acknowledgments
 
-This migration is prepared on `feature/rift-transformation`; no release has
-been published. The original repository has no license, and no license is
-inserted here without ownership and redistribution review. Treat the project
-and bundled data as all rights reserved until licensing is resolved.
+RIFT is at its initial prepared release (`2.0.0`); release notes are in
+[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md). No license has been chosen
+yet, and none is inserted without ownership and redistribution review. Treat
+the project and bundled data as all rights reserved until licensing is
+resolved.
 
 RIFT builds on the Model Context Protocol, Sentence Transformers, FAISS, and
-NumPy. See [`CHANGELOG.md`](CHANGELOG.md) for the unreleased migration notes.
+NumPy. See [`CHANGELOG.md`](CHANGELOG.md).

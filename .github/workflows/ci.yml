@@ -19,4 +19,4 @@ jobs:
       - name: Lint
         run: ruff check .
       - name: Compile Python
-        run: python -m compileall -q dayunhalawa_mcp scripts tests
+        run: python -m compileall -q rift_mcp scripts tests

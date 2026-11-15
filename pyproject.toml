@@ -23,11 +23,10 @@ dependencies = [
 ]
 
 [project.scripts]
-dayunhalawa-mcp = "dayunhalawa_mcp.__main__:main"
-rift = "dayunhalawa_mcp.__main__:main"
+rift = "rift_mcp.__main__:main"
 
 [tool.setuptools.packages.find]
-include = ["dayunhalawa_mcp*"]
+include = ["rift_mcp*"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.6"]
