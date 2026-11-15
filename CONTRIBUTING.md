@@ -11,7 +11,7 @@ Before opening a pull request:
 .venv/bin/pip install -e '.[dev]'
 .venv/bin/pytest
 .venv/bin/ruff check .
-python -m compileall -q rift_mcp scripts
+python -m compileall -q rift_mcp scripts tests
 ```
 
 Describe compatibility impact, data provenance, security implications, and

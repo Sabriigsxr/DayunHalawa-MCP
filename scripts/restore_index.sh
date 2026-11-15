@@ -28,8 +28,14 @@ if [ "$EXPECTED" != "$ACTUAL" ]; then
   exit 1
 fi
 
+PYTHON_BIN="$(command -v python3 || command -v python || true)"
+if [ -z "$PYTHON_BIN" ]; then
+  echo "[!] python3 (or python) is required for archive verification" >&2
+  exit 1
+fi
+
 echo "[*] Checking archive paths..."
-python - "$ARCHIVE" <<'PY'
+"$PYTHON_BIN" - "$ARCHIVE" <<'PY'
 import posixpath
 import sys
 import tarfile
