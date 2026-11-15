@@ -2,8 +2,8 @@
 
 RIFT uses normalized Sentence-Transformers embeddings and FAISS inner-product
 search. With normalized vectors, the inner product is cosine similarity. The
-default result threshold is `0.25`; `top_k` is clamped to 1–20 to preserve the
-original behavior.
+default result threshold is `0.25`; `top_k` is clamped to 1–20 to bound
+result size and cost.
 
 The loader validates:
 

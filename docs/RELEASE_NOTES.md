@@ -26,8 +26,8 @@ security contact.
 - The HTTP endpoint has no built-in authentication; bind localhost only or
   put it behind an access-controlled boundary.
 - Retrieval quality is not a substitute for human review.
-- CI validates fixtures and code paths; it does not rebuild the 207 MB-class
-  bundled index.
+- CI validates fixtures and code paths; it does not restore or rebuild the
+  bundled index archive (about 53 MB compressed, ~155 MB restored).
 - MCP SDK 1.x/2.x compatibility is provided by an import shim, not by a
   version matrix.
 
