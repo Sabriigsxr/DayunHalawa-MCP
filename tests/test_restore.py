@@ -67,3 +67,35 @@ def test_restore_rejects_traversal_member(tmp_path):
     result = subprocess.run(["bash", str(script)], check=False, capture_output=True, text=True)
     assert result.returncode != 0
     assert not (tmp_path / "index").exists()
+
+
+def test_restore_rejects_special_member_type(tmp_path):
+    script = make_fixture(
+        tmp_path,
+        {
+            "./faiss.index": b"faiss",
+            "./documents.jsonl": b"",
+            "./metadata.jsonl": b"",
+        },
+    )
+    archive = tmp_path / "data" / "index.tar.gz"
+    with tarfile.open(archive, "w:gz") as tar:
+        for arcname, data in (
+            ("./faiss.index", b"faiss"),
+            ("./documents.jsonl", b""),
+            ("./metadata.jsonl", b""),
+        ):
+            info = tarfile.TarInfo(arcname)
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+        info = tarfile.TarInfo("./payload.fifo")
+        info.type = tarfile.FIFOTYPE
+        info.size = 0
+        tar.addfile(info)
+    (tmp_path / "data" / "index.tar.gz.sha256").write_text(
+        hashlib.sha256(archive.read_bytes()).hexdigest() + "\n",
+        encoding="utf-8",
+    )
+    result = subprocess.run(["bash", str(script)], check=False, capture_output=True, text=True)
+    assert result.returncode != 0
+    assert not (tmp_path / "index").exists()

@@ -87,6 +87,28 @@ def test_engine_rejects_empty_query(tmp_path, fake_dependencies):
         instance.search("   ")
 
 
+def test_search_rejects_non_finite_threshold(tmp_path, fake_dependencies):
+    write_index(tmp_path)
+    instance = engine.Engine(tmp_path)
+    with pytest.raises(ValueError, match="finite"):
+        instance.search("query", threshold=float("nan"))
+    with pytest.raises(ValueError, match="finite"):
+        instance.search("query", threshold=float("inf"))
+    with pytest.raises(ValueError, match="finite"):
+        instance.search("query", threshold=float("-inf"))
+
+
+def test_search_rejects_non_finite_top_k(tmp_path, fake_dependencies):
+    write_index(tmp_path)
+    instance = engine.Engine(tmp_path)
+    with pytest.raises(ValueError, match="finite"):
+        instance.search("query", top_k=float("nan"))
+    with pytest.raises(ValueError, match="finite"):
+        instance.search("query", top_k=float("inf"))
+    with pytest.raises(ValueError, match="finite"):
+        instance.search("query", top_k=float("-inf"))
+
+
 def test_engine_rejects_dimension_mismatch(tmp_path, monkeypatch, fake_dependencies):
     write_index(tmp_path)
 
