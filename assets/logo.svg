@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">RIFT</title>
+  <desc id="desc">Crimson geometric RIFT symbol and wordmark on a charcoal background.</desc>
+  <rect width="640" height="180" rx="18" fill="#090a0d"/>
+  <g fill="none" stroke="#d7193f" stroke-width="12" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M58 42h62l25 25-25 25H58z"/>
+    <path d="M58 92v46"/>
+    <path d="M88 92l57 46"/>
+    <path d="M112 42v42"/>
+  </g>
+  <path d="M160 35v110" stroke="#f04a68" stroke-width="4"/>
+  <text x="192" y="116" fill="#f2f3f5" font-family="DejaVu Sans, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="8">RIFT</text>
+</svg>

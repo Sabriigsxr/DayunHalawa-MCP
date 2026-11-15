@@ -1,194 +1,206 @@
-# DayunHalawa-MCP
+# RIFT
 
-**Offensive Scenario RAG — MCP Server**
+## Red-team Intelligence & Fusion Toolkit
 
-A local [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that exposes a
-large offensive-security / pentesting / DFIR Q&A knowledge base to agentic coding apps
-(OpenCode, Claude Desktop, Cursor, and any MCP-capable client).
+**MCP-powered offensive security intelligence engine using local semantic
+retrieval, FAISS, and RAG.**
 
-Retrieval-only (extractive): the server searches a local FAISS index and returns the most
-relevant stored Q&A entries with scores and metadata. It does **not** generate attack plans,
-and it does **not** require an LLM API key or internet access at query time.
+[![CI](https://github.com/Sabriigsxr/RIFT/actions/workflows/ci.yml/badge.svg)](https://github.com/Sabriigsxr/RIFT/actions/workflows/ci.yml)
 
-> ⚠️ **EDUCATIONAL / AUTHORIZED USE ONLY.** This project is for authorized defensive security
-> testing, education and research on systems you own or have explicit written permission to
-> assess. Do not use it to access systems, accounts or data without authorization, or to defeat
-> security controls you do not own. See [`WARNING.txt`](./WARNING.txt) for the full terms.
+RIFT is a local-first Model Context Protocol (MCP) server for authorized
+penetration testing, detection engineering, DFIR, cybersecurity education,
+and security research. It retrieves existing knowledge-base entries with
+Sentence Transformers and FAISS; it does not generate attack plans, execute
+commands, or require a paid API.
 
----
+> **Authorized use only.** Use RIFT only on systems and data you own or have
+> explicit written permission to assess. Read
+> [`docs/ETHICAL_USE.md`](docs/ETHICAL_USE.md) and [`WARNING.txt`](WARNING.txt).
 
-## What's inside
+## Why RIFT
 
-| Component | Description |
-|---|---|
-| `dayunhalawa_mcp/engine.py` | FAISS + `sentence-transformers` retrieval engine (lazy singleton) |
-| `dayunhalawa_mcp/server.py` | MCP server (FastMCP): tools and prompt |
-| `dayunhalawa_mcp/__main__.py` | CLI entry point: stdio (default) or localhost HTTP transport |
-| `scripts/build_index.py` | Rebuild the FAISS index from a `documents.jsonl` file |
+- **Local-first:** query-time retrieval works without a cloud service after
+  the model and index are installed.
+- **MCP-native:** stdio is the default for desktop and coding clients, with
+  streamable HTTP available on localhost.
+- **Extractive and inspectable:** results include IDs, scores, metadata, and
+  source Q&A rather than silently generated claims.
+- **Preserves the original project:** the `dayunhalawa_mcp` import path,
+  legacy CLI, environment variables, tools, prompt, and bundled index remain
+  compatible.
 
-### MCP tools
+## Architecture
 
-| Tool | Purpose |
-|---|---|
-| `search_offensive_scenarios(query, top_k=5, threshold=0.25)` | Semantic search; returns JSON with score/category/tags/CVEs/tools/Q&A |
-| `ask_offensive_scenario(question, top_k=5, threshold=0.25)` | Formatted extractive answer for humans/agents |
-| `index_stats()` | Vector/document counts, model name, resolved index path |
-
-### MCP prompt
-
-- `offensive_scenario_brief(topic)` — structures a briefing request (technique → ATT&CK mapping, detection, mitigation, CVEs) grounded in retrieved entries.
-
-### Knowledge base
-
-~23,000+ Q&A entries (23,737 vectors) spanning ATT&CK techniques, detection engineering, DFIR,
-offensive tradecraft (detection-focused), mitigations and tooling.
-
-**The data is bundled in the repo** as `data/index.tar.gz` (≈53 MB compressed; ~207 MB
-uncompressed) with a SHA-256 checksum (`data/index.tar.gz.sha256`) and a restore script
-(`scripts/restore_index.sh`). After clone, run:
-
-```bash
-bash scripts/restore_index.sh        # extracts to ./index (verifies SHA-256 first)
+```mermaid
+flowchart TD
+    C[MCP client] --> S[RIFT MCP server]
+    S --> T[Tools and prompt]
+    T --> E[Semantic retrieval engine]
+    E --> M[Sentence Transformer]
+    E --> F[FAISS index]
+    E --> J[Aligned JSONL metadata and documents]
+    E --> R[Ranked extractive results]
+    R --> C
 ```
 
-This unpacks `faiss.index`, `documents.jsonl`, `metadata.jsonl` into `./index/` (git-ignored).
-`--force` re-extracts over an existing `./index`.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the actual lifecycle
+and [`docs/RETRIEVAL_ENGINE.md`](docs/RETRIEVAL_ENGINE.md) for validation and
+scoring details.
 
-## Requirements
+## MCP capabilities
 
-- Python ≥ 3.10
-- ~300 MB disk for model + deps (embedding model cached on first run)
-- Local index directory containing:
-  - `faiss.index` — FAISS `IndexFlatIP` over normalized embeddings
-  - `documents.jsonl` — one JSON object per line: `{"doc_id", "question", "answer", ...}`
-  - `metadata.jsonl` — one JSON object per line with the non-Q&A fields (`category`, `tags`,
-    `cve_references`, `tools_used`, …), indexed in the same order as `documents.jsonl`
+| Capability | Purpose |
+|---|---|
+| `search_offensive_scenarios` | JSON semantic search with scores and metadata |
+| `ask_offensive_scenario` | Human-readable extractive rendering |
+| `index_stats` | Vector, document, dimension, model, and path information |
+| `offensive_scenario_brief` | Prompt template for a grounded research briefing |
 
-## Install
+The original project registered no MCP resources. Tool names remain unchanged
+for compatibility.
+
+## Installation
 
 ```bash
-git clone https://github.com/Sabriigsxr/DayunHalawa-MCP.git
-cd DayunHalawa-MCP
-
+git clone https://github.com/Sabriigsxr/RIFT.git
+cd RIFT
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-# or, editable console script:
 .venv/bin/pip install -e .
-```
-
-## Index setup
-
-The server reads the index from `$DAYUNHALAWA_INDEX_DIR` if set, otherwise `./index/` in the
-repo root.
-
-Option A — restore the bundled index (recommended):
-
-```bash
 bash scripts/restore_index.sh
 ```
 
-Option B — point it at an existing build:
-
-```bash
-export DAYUNHALAWA_INDEX_DIR=/path/to/index   # contains faiss.index, documents.jsonl, metadata.jsonl
-```
-
-Option C — build one from a `documents.jsonl` you have rights to use:
-
-```bash
-.venv/bin/python scripts/build_index.py --documents /path/to/documents.jsonl --out ./index
-```
-
-First run downloads `sentence-transformers/all-MiniLM-L6-v2` (~80 MB) unless already cached;
-after that, everything runs locally offline.
+The archive is preserved from the original project, verified by SHA-256, and
+restored to the git-ignored `index/` directory. It contains 23,737 document
+and metadata records. RIFT does not automatically regenerate or replace it.
+See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) and
+[`docs/DATASET.md`](docs/DATASET.md).
 
 ## Run
 
-### stdio (default — what agent coding apps use)
+stdio is the default transport:
 
 ```bash
-.venv/bin/python -m dayunhalawa_mcp
+.venv/bin/rift
+# Legacy equivalent:
+.venv/bin/dayunhalawa-mcp
 ```
 
-Console script equivalent after `pip install -e .`:
+For a local streamable HTTP endpoint:
 
 ```bash
-dayunhalawa-mcp
+.venv/bin/rift --transport http --host 127.0.0.1 --port 8787
+# endpoint: http://127.0.0.1:8787/mcp
 ```
 
-### Localhost HTTP (any MCP-capable app)
+The first model load may need network access to populate the local model
+cache. Later, use `HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1` for offline
+operation.
+
+## Configuration
+
+Preferred variables are `RIFT_INDEX_DIR` and `RIFT_MODEL`. The original
+`DAYUNHALAWA_INDEX_DIR` and `DAYUNHALAWA_MODEL` names remain supported.
 
 ```bash
-.venv/bin/python -m dayunhalawa_mcp --transport http --host 127.0.0.1 --port 8787
-# MCP endpoint: http://127.0.0.1:8787/mcp
+export RIFT_INDEX_DIR="$PWD/index"
+export RIFT_MODEL="sentence-transformers/all-MiniLM-L6-v2"
 ```
+
+The model must match the index embedding dimension. Configuration and network
+exposure guidance are in [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md).
 
 ## Client configuration
 
-### OpenCode (`opencode.json` / project or global config)
-
-```jsonc
-{
-  "mcp": {
-    "dayunhalawa-mcp": {
-      "type": "local",
-      "enabled": true,
-      "command": [
-        "/absolute/path/to/DayunHalawa-MCP/.venv/bin/python",
-        "-m",
-        "dayunhalawa_mcp"
-      ],
-      "environment": {
-        "DAYUNHALAWA_INDEX_DIR": "/absolute/path/to/DayunHalawa-MCP/index"
-      }
-    }
-  }
-}
-```
-
-Then reference the tools as `dayunhalawa-mcp_search_offensive_scenarios` in your agent prompts.
-
-### Claude Desktop (`claude_desktop_config.json`)
+### Claude Desktop
 
 ```json
 {
   "mcpServers": {
-    "dayunhalawa-mcp": {
-      "command": "/absolute/path/to/DayunHalawa-MCP/.venv/bin/python",
+    "rift": {
+      "command": "/absolute/path/to/RIFT/.venv/bin/python",
       "args": ["-m", "dayunhalawa_mcp"],
       "env": {
-        "DAYUNHALAWA_INDEX_DIR": "/absolute/path/to/DayunHalawa-MCP/index"
+        "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index"
       }
     }
   }
 }
 ```
 
-Restart the client after editing its config.
+### OpenCode
 
-### Generic MCP client over HTTP
+```jsonc
+{
+  "mcp": {
+    "rift": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/absolute/path/to/RIFT/.venv/bin/python", "-m", "dayunhalawa_mcp"],
+      "environment": {
+        "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index"
+      }
+    }
+  }
+}
+```
 
-Start the HTTP transport (above), then point your client's MCP configuration at
-`http://127.0.0.1:8787/mcp` (streamable HTTP transport).
+Existing configurations keyed as `dayunhalawa-mcp` continue to work. No
+additional client is claimed without a verified integration.
 
-## Environment variables
+## Rebuild an index
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `DAYUNHALAWA_INDEX_DIR` | `<repo>/index` | Directory with `faiss.index`, `documents.jsonl`, `metadata.jsonl` |
-| `DAYUNHALAWA_MODEL` | `sentence-transformers/all-MiniLM-L6-v2` | Embedding model for query encoding |
-| `HF_HUB_OFFLINE` | unset | Set to `1` to forbid model-hub network checks at query time |
-| `TRANSFORMERS_OFFLINE` | unset | Set to `1` to force fully local model loading |
+Only build from a dataset you are authorized to use:
 
-## Notes on behavior and scope
+```bash
+.venv/bin/python scripts/build_index.py \
+  --documents /path/to/documents.jsonl \
+  --out /path/to/new-index
+```
 
-- Query encoding is local; the FAISS index is opened read-only.
-- If the index or model is missing, tools return an error describing what is missing and how to fix it.
-- Retrieve first with `threshold≈0.25`; lower it (e.g. 0.15) for broader recall.
-- No shell execution, no file writes, no network calls are made by this server.
+The builder validates JSONL records, uses the selected embedding model, and
+refuses to overwrite a populated directory unless `--force` is supplied.
+Never mix an index with JSONL files from another build.
 
-## License & attribution
+## Security and ethical use
 
-No license has been selected yet — treat all rights as reserved until one is added. The bundled
-warning (`WARNING.txt`) applies regardless of license. You are responsible for having rights to
-any `documents.jsonl` you build an index from.
+RIFT is not an autonomous exploitation framework. It has no shell execution
+or arbitrary target access. HTTP is unauthenticated and binds to localhost by
+default; do not expose it publicly without access controls and TLS. Retrieved
+text is untrusted reference material and must be independently reviewed.
+
+Read [`docs/SECURITY.md`](docs/SECURITY.md) and
+[`docs/ETHICAL_USE.md`](docs/ETHICAL_USE.md).
+
+## Development
+
+```bash
+.venv/bin/pip install -e '.[dev]'
+.venv/bin/pytest
+.venv/bin/ruff check .
+python -m compileall -q dayunhalawa_mcp scripts
+```
+
+See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md),
+[`CONTRIBUTING.md`](CONTRIBUTING.md), and
+[`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md).
+
+Migration and release preparation details are in
+[`docs/MIGRATION.md`](docs/MIGRATION.md) and
+[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
+
+## Roadmap
+
+- Reproducible, signed index builds with documented dataset provenance.
+- Broader integrity and compatibility coverage across MCP SDK major versions.
+- Optional retrieval evaluation sets for recall and ranking regression checks.
+- Maintainer-reviewed dataset governance and contribution workflow.
+
+## Status, license, and acknowledgments
+
+This migration is prepared on `feature/rift-transformation`; no release has
+been published. The original repository has no license, and no license is
+inserted here without ownership and redistribution review. Treat the project
+and bundled data as all rights reserved until licensing is resolved.
+
+RIFT builds on the Model Context Protocol, Sentence Transformers, FAISS, and
+NumPy. See [`CHANGELOG.md`](CHANGELOG.md) for the unreleased migration notes.

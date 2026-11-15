@@ -1,0 +1,53 @@
+# MCP integration
+
+RIFT retains the original import path and tool names for compatibility while
+adding the `rift` console command and branding. The registered tools are:
+
+- `search_offensive_scenarios(query, top_k=5, threshold=0.25)`
+- `ask_offensive_scenario(question, top_k=5, threshold=0.25)`
+- `index_stats()`
+
+The registered prompt is `offensive_scenario_brief(topic)`. The original
+server registered no MCP resources.
+
+## Claude Desktop
+
+```json
+{
+  "mcpServers": {
+    "rift": {
+      "command": "/absolute/path/to/RIFT/.venv/bin/python",
+      "args": ["-m", "dayunhalawa_mcp"],
+      "env": {
+        "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      }
+    }
+  }
+}
+```
+
+Existing configurations using the key `dayunhalawa-mcp` and legacy
+environment variables remain valid.
+
+## OpenCode
+
+```jsonc
+{
+  "mcp": {
+    "rift": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/absolute/path/to/RIFT/.venv/bin/python", "-m", "dayunhalawa_mcp"],
+      "environment": {
+        "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index"
+      }
+    }
+  }
+}
+```
+
+RIFT also supports streamable HTTP at
+`http://127.0.0.1:8787/mcp`. No other client is claimed here without a
+verified repository integration.

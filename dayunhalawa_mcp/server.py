@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-DayunHalawa-MCP — Offensive Scenario RAG MCP server.
+"""RIFT MCP server.
 
 Exposes the local pentesting / DFIR / offensive-scenario Q&A knowledge base
 to MCP clients (OpenCode, Claude Desktop, Cursor, etc.).
@@ -29,7 +28,7 @@ except ModuleNotFoundError:  # mcp 2.x renamed FastMCP -> MCPServer
 from .engine import get_engine
 
 INSTRUCTIONS = (
-    "DayunHalawa-MCP is a retrieval layer over a local offensive-scenario / pentesting "
+    "RIFT is a retrieval layer over a local offensive-scenario / pentesting "
     "Q&A knowledge base (ATT&CK-mapped detection, DFIR, offensive techniques, mitigations). "
     "Answers are extractive: the server returns the most relevant stored Q&A entries, not "
     "newly generated attack plans. EDUCATIONAL / AUTHORIZED USE ONLY — for defensive testing, "
@@ -37,7 +36,7 @@ INSTRUCTIONS = (
     "Do not use to access systems or data without authorization."
 )
 
-mcp = _Server("dayunhalawa-mcp", instructions=INSTRUCTIONS)
+mcp = _Server("rift", instructions=INSTRUCTIONS)
 
 
 @mcp.tool()
@@ -111,7 +110,7 @@ def offensive_scenario_brief(topic: str) -> list[dict[str, Any]]:
         {
             "role": "user",
             "content": (
-                f"Using the dayunhalawa-mcp knowledge base, produce a briefing on: {topic}\n\n"
+                f"Using the RIFT knowledge base, produce a briefing on: {topic}\n\n"
                 "1. What the technique is and how it maps to MITRE ATT&CK.\n"
                 "2. How defenders detect it (logs, event IDs, tools).\n"
                 "3. Mitigations and hardening steps.\n"

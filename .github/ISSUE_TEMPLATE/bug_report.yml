@@ -1,0 +1,27 @@
+name: Bug report
+description: Report a reproducible problem with RIFT.
+title: "[bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include credentials, private index contents, or live target data."
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Include the expected and actual behavior.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide sanitized commands and the complete error output.
+    validations:
+      required: true
