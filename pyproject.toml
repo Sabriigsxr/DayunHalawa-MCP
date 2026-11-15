@@ -9,7 +9,7 @@ description = "MCP-powered offensive security intelligence engine using local se
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Ahmed Sabry" }]
-keywords = ["mcp", "model-context-protocol", "pentesting", "rag", "offensive-security", "red-team", "faiss"]
+keywords = ["mcp", "model-context-protocol", "pentesting", "rag", "offensive-security", "red-team", "faiss", "egypt", "security-research"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Intended Audience :: Information Technology",
@@ -23,11 +23,15 @@ dependencies = [
 ]
 
 [project.scripts]
-dayunhalawa-mcp = "dayunhalawa_mcp.__main__:main"
-rift = "dayunhalawa_mcp.__main__:main"
+rift = "rift_mcp.__main__:main"
 
 [tool.setuptools.packages.find]
-include = ["dayunhalawa_mcp*"]
+include = ["rift_mcp*"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.urls]
+Homepage = "https://github.com/Sabriigsxr/RIFT"
+Repository = "https://github.com/Sabriigsxr/RIFT"
+Issues = "https://github.com/Sabriigsxr/RIFT/issues"

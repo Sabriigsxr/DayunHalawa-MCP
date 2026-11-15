@@ -14,8 +14,7 @@ bash scripts/restore_index.sh
 
 The restore script verifies the tracked SHA-256 before extracting the bundled
 archive. It will not replace an existing `index/` unless `--force` is passed.
-To use a separately built index, set `RIFT_INDEX_DIR` (the legacy
-`DAYUNHALAWA_INDEX_DIR` remains supported).
+To use a separately built index, set `RIFT_INDEX_DIR`.
 
 The first query may require the embedding model to be present in the local
 Hugging Face cache. After the model and index are available, retrieval can run

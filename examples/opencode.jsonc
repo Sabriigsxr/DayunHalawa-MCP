@@ -7,7 +7,7 @@
       "command": [
         "/absolute/path/to/RIFT/.venv/bin/python",
         "-m",
-        "dayunhalawa_mcp"
+        "rift_mcp"
       ],
       "environment": {
         "RIFT_INDEX_DIR": "/absolute/path/to/RIFT/index",

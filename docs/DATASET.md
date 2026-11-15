@@ -1,7 +1,7 @@
 # Dataset and index
 
-The tracked `data/index.tar.gz` is preserved from the original project and
-contains the existing FAISS index plus aligned JSONL stores. The archive's
+The tracked `data/index.tar.gz` contains the FAISS index plus aligned JSONL
+stores. The archive's
 record counts are 23,737 document lines and 23,737 metadata lines. Its
 SHA-256 is recorded in `data/index.tar.gz.sha256`.
 

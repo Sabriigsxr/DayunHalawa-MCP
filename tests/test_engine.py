@@ -4,7 +4,7 @@ import types
 
 import pytest
 
-from dayunhalawa_mcp import engine
+from rift_mcp import engine
 
 
 class FakeIndex:

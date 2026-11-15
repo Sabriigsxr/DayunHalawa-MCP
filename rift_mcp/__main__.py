@@ -2,9 +2,9 @@
 """Command-line entry point for RIFT.
 
 Usage:
-    python -m dayunhalawa_mcp                  # stdio transport (default; for OpenCode/Claude)
-    python -m dayunhalawa_mcp --transport http  # HTTP transport on 127.0.0.1:8787
-    python -m dayunhalawa_mcp --transport http --port 9000
+    python -m rift_mcp                  # stdio transport (default; for OpenCode/Claude)
+    python -m rift_mcp --transport http  # HTTP transport on 127.0.0.1:8787
+    python -m rift_mcp --transport http --port 9000
 """
 from __future__ import annotations
 

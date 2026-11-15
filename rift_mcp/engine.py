@@ -27,13 +27,13 @@ def _first_env(*names: str, default: str) -> str:
     return default
 
 
-MODEL_NAME = _first_env("RIFT_MODEL", "DAYUNHALAWA_MODEL", default=DEFAULT_MODEL_NAME)
+MODEL_NAME = _first_env("RIFT_MODEL", default=DEFAULT_MODEL_NAME)
 
 
 def _resolve_index_dir(index_dir: str | os.PathLike | None = None) -> Path:
     if index_dir:
         return Path(index_dir).expanduser().resolve()
-    env = _first_env("RIFT_INDEX_DIR", "DAYUNHALAWA_INDEX_DIR", default="")
+    env = _first_env("RIFT_INDEX_DIR", default="")
     if env:
         return Path(env).expanduser().resolve()
     return DEFAULT_INDEX_DIR
@@ -73,8 +73,8 @@ class Engine:
             if not p.exists():
                 raise FileNotFoundError(
                     f"Index file missing: {p}. Expected faiss.index, documents.jsonl "
-                    f"and metadata.jsonl in DAYUNHALAWA_INDEX_DIR (current: {self.index_dir}). "
-                    "See README.md#building-the-index."
+                    f"and metadata.jsonl in RIFT_INDEX_DIR (current: {self.index_dir}). "
+                    "See docs/TROUBLESHOOTING.md."
                 )
 
         self.index = faiss.read_index(str(faiss_path))

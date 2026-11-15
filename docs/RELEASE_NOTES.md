@@ -1,41 +1,44 @@
-# RIFT 2.0.0 release notes
+# RIFT 2.0.0 — release notes
 
 ## Status
 
-Prepared, not published. This release must not be tagged or uploaded until
-ownership, dataset redistribution rights, repository metadata, and the final
-security contact are reviewed by the maintainer.
+Prepared, not published. Tag and publish only after maintainer review of
+ownership, dataset redistribution rights, final repository metadata, and the
+security contact.
 
 ## Highlights
 
-- RIFT identity and original visual assets.
+- RIFT — Red-team Intelligence & Fusion Toolkit identity and original
+  visual assets. Made in Egypt 🇪🇬 — Ahmed Sabry, Cyber Security Researcher.
 - Local-first MCP server with stdio and localhost streamable HTTP.
-- Legacy package, command, environment variables, tools, and prompt retained.
-- Integrity checks for JSONL, FAISS/document alignment, IDs, and dimensions.
-- Safe checksum verification and archive extraction.
-- Documentation, CI, tests, contributor files, and migration guidance.
+- Integrity checks for JSONL parsing, document/metadata alignment, FAISS
+  vector counts, doc IDs, and embedding dimensions.
+- SHA-256-verified bundled index with safe, traversal-checked restoration.
+- Fail-closed validation: malformed inputs produce explicit errors rather
+  than partial or misleading results.
+- Documentation, CI workflow, tests, examples, and contributor files.
+- Extractive retrieval: no generated attack plans, no network at query
+  time after setup.
 
 ## Known limitations
 
-- The repository still has no selected license.
-- The HTTP endpoint has no built-in authentication.
-- Retrieval quality is not a substitute for human review or dataset
-  provenance.
-- CI validates fixtures and code paths but does not restore or regenerate the
-  207 MB-class index artifact.
-- Cross-version MCP behavior is covered by the compatibility import path but
-  not by a matrix of every MCP SDK release.
+- No selected license yet; treat the project and bundled data as reserved.
+- The HTTP endpoint has no built-in authentication; bind localhost only or
+  put it behind an access-controlled boundary.
+- Retrieval quality is not a substitute for human review.
+- CI validates fixtures and code paths; it does not rebuild the 207 MB-class
+  bundled index.
+- MCP SDK 1.x/2.x compatibility is provided by an import shim, not by a
+  version matrix.
 
 ## Verification checklist
 
-- [x] Original HEAD and working-tree state recorded.
-- [x] Original archive and checksum preserved.
+- [x] Bundled archive and checksum preserved and verified.
 - [x] Focused tests pass locally.
 - [x] Ruff and compile checks pass locally.
-- [x] Package installation and both CLI aliases verified.
-- [x] Real FAISS index loaded and queried offline in the local environment.
+- [x] Package installation and `rift` console script verified.
+- [x] Real FAISS index loaded and queried offline locally.
 - [x] Localhost HTTP startup verified.
 - [ ] Maintainer confirms licensing and dataset rights.
-- [ ] Maintainer reviews GitHub metadata and repository rename.
-- [ ] Maintainer performs a clean-machine install from the eventual RIFT URL.
+- [ ] Maintainer performs a clean-machine install.
 - [ ] Maintainer tags and publishes only after explicit approval.

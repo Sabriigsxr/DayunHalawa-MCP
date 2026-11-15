@@ -2,6 +2,10 @@
                          RIFT — RESPONSIBLE USE
 ================================================================================
 
+Developer : Ahmed Sabry (Sabriigsxr) — Cyber Security Researcher
+Origin    : Made in Egypt 🇪🇬
+Project   : RIFT — Red-team Intelligence & Fusion Toolkit
+
 RIFT (Red-team Intelligence & Fusion Toolkit) is provided for authorized
 defensive security testing, cybersecurity education, DFIR, and research on
 systems and datasets you own or have explicit written permission to assess.
