@@ -40,10 +40,19 @@ and it does **not** require an LLM API key or internet access at query time.
 
 ### Knowledge base
 
-~23,000+ Q&A entries spanning ATT&CK techniques, detection engineering, DFIR, offensive
-tradecraft (detection-focused), mitigations and tooling. **The built index is not committed to
-this repository** (`documents.jsonl` ≈ 120 MB, over GitHub's 100 MB per-file limit and not
-redistributable in-repo). Bring or build your own index — see below.
+~23,000+ Q&A entries (23,737 vectors) spanning ATT&CK techniques, detection engineering, DFIR,
+offensive tradecraft (detection-focused), mitigations and tooling.
+
+**The data is bundled in the repo** as `data/index.tar.gz` (≈53 MB compressed; ~207 MB
+uncompressed) with a SHA-256 checksum (`data/index.tar.gz.sha256`) and a restore script
+(`scripts/restore_index.sh`). After clone, run:
+
+```bash
+bash scripts/restore_index.sh        # extracts to ./index (verifies SHA-256 first)
+```
+
+This unpacks `faiss.index`, `documents.jsonl`, `metadata.jsonl` into `./index/` (git-ignored).
+`--force` re-extracts over an existing `./index`.
 
 ## Requirements
 
@@ -58,7 +67,7 @@ redistributable in-repo). Bring or build your own index — see below.
 ## Install
 
 ```bash
-git clone https://github.com/<YOUR_OWNER>/DayunHalawa-MCP.git
+git clone https://github.com/Sabriigsxr/DayunHalawa-MCP.git
 cd DayunHalawa-MCP
 
 python3 -m venv .venv
@@ -72,13 +81,19 @@ python3 -m venv .venv
 The server reads the index from `$DAYUNHALAWA_INDEX_DIR` if set, otherwise `./index/` in the
 repo root.
 
-Option A — point it at an existing build:
+Option A — restore the bundled index (recommended):
+
+```bash
+bash scripts/restore_index.sh
+```
+
+Option B — point it at an existing build:
 
 ```bash
 export DAYUNHALAWA_INDEX_DIR=/path/to/index   # contains faiss.index, documents.jsonl, metadata.jsonl
 ```
 
-Option B — build one from a `documents.jsonl` you have rights to use:
+Option C — build one from a `documents.jsonl` you have rights to use:
 
 ```bash
 .venv/bin/python scripts/build_index.py --documents /path/to/documents.jsonl --out ./index
