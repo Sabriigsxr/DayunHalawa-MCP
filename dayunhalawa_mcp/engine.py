@@ -1,5 +1,4 @@
-"""
-DayunHalawa-MCP — retrieval engine for the offensive-scenario knowledge base.
+"""RIFT retrieval engine for the offensive-scenario knowledge base.
 
 Loads a local FAISS index of pentesting / DFIR / TTPs Q&A pairs and performs
 semantic search. No network access is required at query time once the
@@ -11,31 +10,59 @@ import json
 import os
 import threading
 from pathlib import Path
-from typing import Any, Optional
-
-import faiss
-import numpy as np
+from typing import Any
 
 # Package root = repo root (parent of this file's directory)
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_INDEX_DIR = REPO_ROOT / "index"
 
-MODEL_NAME = os.environ.get("DAYUNHALAWA_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+DEFAULT_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
-def _resolve_index_dir(index_dir: Optional[str | os.PathLike] = None) -> Path:
+def _first_env(*names: str, default: str) -> str:
+    for name in names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    return default
+
+
+MODEL_NAME = _first_env("RIFT_MODEL", "DAYUNHALAWA_MODEL", default=DEFAULT_MODEL_NAME)
+
+
+def _resolve_index_dir(index_dir: str | os.PathLike | None = None) -> Path:
     if index_dir:
         return Path(index_dir).expanduser().resolve()
-    env = os.environ.get("DAYUNHALAWA_INDEX_DIR")
+    env = _first_env("RIFT_INDEX_DIR", "DAYUNHALAWA_INDEX_DIR", default="")
     if env:
         return Path(env).expanduser().resolve()
     return DEFAULT_INDEX_DIR
 
 
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    try:
+        with path.open(encoding="utf-8") as fh:
+            for line_number, line in enumerate(fh, 1):
+                if not line.strip():
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"Invalid JSON in {path} at line {line_number}: {exc}") from exc
+                if not isinstance(record, dict):
+                    raise TypeError(f"Expected an object in {path} at line {line_number}")
+                records.append(record)
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"{path} is not valid UTF-8: {exc}") from exc
+    return records
+
+
 class Engine:
     """FAISS + sentence-transformers retrieval engine (lazy singleton)."""
 
-    def __init__(self, index_dir: Optional[str | os.PathLike] = None):
+    def __init__(self, index_dir: str | os.PathLike | None = None):
+        import faiss  # deferred import so configuration errors remain inspectable without FAISS
         from sentence_transformers import SentenceTransformer  # deferred import
 
         self.index_dir = _resolve_index_dir(index_dir)
@@ -50,20 +77,48 @@ class Engine:
                     "See README.md#building-the-index."
                 )
 
-        self.model = SentenceTransformer(MODEL_NAME)
         self.index = faiss.read_index(str(faiss_path))
-        with meta_path.open(encoding="utf-8") as fh:
-            self.metadata = [json.loads(l) for l in fh if l.strip()]
+        self.metadata = _read_jsonl(meta_path)
         self.documents: dict[str, dict] = {}
-        with docs_path.open(encoding="utf-8") as fh:
-            for line in fh:
-                line = line.strip()
-                if not line:
-                    continue
-                d = json.loads(line)
-                doc_id = d.get("doc_id")
-                if doc_id:
-                    self.documents[doc_id] = d
+        for document in _read_jsonl(docs_path):
+            doc_id = document.get("doc_id")
+            if not isinstance(doc_id, str) or not doc_id:
+                raise ValueError(f"Document in {docs_path} is missing a non-empty doc_id")
+            if doc_id in self.documents:
+                raise ValueError(f"Duplicate doc_id {doc_id!r} in {docs_path}")
+            self.documents[doc_id] = document
+
+        if self.index.ntotal != len(self.metadata):
+            raise ValueError(
+                f"Index/data mismatch in {self.index_dir}: FAISS contains {self.index.ntotal} "
+                f"vectors but metadata.jsonl contains {len(self.metadata)} records"
+            )
+        metadata_ids = []
+        for position, metadata in enumerate(self.metadata, 1):
+            doc_id = metadata.get("doc_id")
+            if not isinstance(doc_id, str) or not doc_id:
+                raise ValueError(f"Metadata record {position} is missing a non-empty doc_id")
+            metadata_ids.append(doc_id)
+            if doc_id not in self.documents:
+                raise ValueError(f"Metadata doc_id {doc_id!r} has no matching document")
+        if len(set(metadata_ids)) != len(metadata_ids):
+            raise ValueError(f"Duplicate doc_id values in {meta_path}")
+        if len(self.documents) != len(self.metadata):
+            raise ValueError(
+                f"Document/metadata mismatch in {self.index_dir}: documents.jsonl contains "
+                f"{len(self.documents)} records but metadata.jsonl contains {len(self.metadata)}"
+            )
+
+        self.model = SentenceTransformer(MODEL_NAME)
+        if hasattr(self.model, "get_embedding_dimension"):
+            model_dimension = self.model.get_embedding_dimension()
+        else:
+            model_dimension = self.model.get_sentence_embedding_dimension()
+        if model_dimension and model_dimension != self.index.d:
+            raise ValueError(
+                f"Embedding dimension mismatch: model {MODEL_NAME!r} produces {model_dimension} "
+                f"dimensions but the FAISS index expects {self.index.d}"
+            )
 
     @property
     def stats(self) -> dict[str, Any]:
@@ -71,11 +126,19 @@ class Engine:
             "index_dir": str(self.index_dir),
             "model": MODEL_NAME,
             "vectors": int(self.index.ntotal),
+            "dimensions": int(self.index.d),
+            "index_type": type(self.index).__name__,
             "metadata_entries": len(self.metadata),
             "documents": len(self.documents),
         }
 
     def search(self, query: str, top_k: int = 5, threshold: float = 0.25) -> list[dict[str, Any]]:
+        if not isinstance(query, str) or not query.strip():
+            raise ValueError("query must be a non-empty string")
+        if isinstance(top_k, bool):
+            raise TypeError("top_k must be an integer between 1 and 20")
+        if isinstance(threshold, bool):
+            raise TypeError("threshold must be a number between 0 and 1")
         top_k = max(1, min(int(top_k), 20))
         threshold = float(max(0.0, min(threshold, 1.0)))
         q = self.model.encode(
@@ -111,7 +174,7 @@ class Engine:
 
 
 _lock = threading.Lock()
-_engine: Optional[Engine] = None
+_engine: Engine | None = None
 
 
 def get_engine() -> Engine:

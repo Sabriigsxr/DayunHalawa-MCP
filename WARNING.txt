@@ -1,44 +1,24 @@
 ================================================================================
-                    OFFENSIVEGX — RESPONSIBLE-USE WARNING
+                         RIFT — RESPONSIBLE USE
 ================================================================================
 
-Project : OffensiveGX (Portable Pentesting RAG)
-Developer: Ahmed Sabry
+RIFT (Red-team Intelligence & Fusion Toolkit) is provided for authorized
+defensive security testing, cybersecurity education, DFIR, and research on
+systems and datasets you own or have explicit written permission to assess.
 
-INTENDED USE (DEFENSIVE / EDUCATIONAL ONLY)
---------------------------------------------------------------------------------
-OffensiveGX is a retrieval-augmented generation (RAG) knowledge base over a
-pentesting / DFIR dataset. It is provided strictly for:
+Do not use RIFT to gain unauthorized access, steal credentials, exfiltrate
+data, deploy malware, evade controls, disrupt services, or target people or
+organizations without permission. Retrieved content is reference material,
+not an authorization, a guarantee of accuracy, or an instruction to act.
 
-  * Authorized defensive security testing
-  * Security education and research
-  * Authorized penetration testing on systems YOU OWN or have EXPLICIT
-    WRITTEN PERMISSION to assess
+Unauthorized access may violate laws and contracts in your jurisdiction.
+You are responsible for obtaining permission, protecting sensitive data, and
+complying with applicable law and professional rules. The project authors
+disclaim liability for misuse or resulting damage to the extent permitted by
+law.
 
-DO NOT USE THIS TOOL TO:
---------------------------------------------------------------------------------
-  * Access systems, accounts, or data without explicit authorization
-  * Steal, harvest, or crack credentials
-  * Exfiltrate data from systems you do not own
-  * Conduct fraud, phishing, social engineering, or any activity that
-    defeats security controls without permission
-  * Deploy ransomware, wipers, botnets, RATs, or other malware
-  * Cause denial of service, disruption, or damage to any system
-
-LEGAL NOTICE
---------------------------------------------------------------------------------
-Unauthorized access to computer systems may violate laws including, but not
-limited to, the U.S. Computer Fraud and Abuse Act (CFAA), the UK Computer
-Misuse Act, the EU Directive on attacks against information systems, and
-equivalent legislation in other jurisdictions. Violations can carry criminal
-penalties, fines, and imprisonment.
-
-The developer (Ahmed Sabry) and this project DISCLAIM ALL LIABILITY for any
-misuse, damage, or legal consequences resulting from the use of this software.
-You are solely responsible for ensuring your use complies with all applicable
-laws and the ISC Code of Ethics.
-
-BY USING THIS SOFTWARE, YOU AGREE TO USE IT ONLY FOR AUTHORIZED,
-DEFENSIVE, AND EDUCATIONAL PURPOSES.
+No project license or dataset redistribution license has been selected.
+Until those rights are reviewed, treat the source and bundled data as
+reserved.
 
 ================================================================================

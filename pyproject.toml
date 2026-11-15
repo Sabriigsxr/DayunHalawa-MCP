@@ -3,13 +3,13 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dayunhalawa-mcp"
-version = "1.0.0"
-description = "Offensive Scenario RAG MCP server — local pentesting/DFIR Q&A knowledge base exposed over MCP (stdio or HTTP) for agentic coding apps."
+name = "rift-mcp"
+version = "2.0.0"
+description = "MCP-powered offensive security intelligence engine using local semantic retrieval, FAISS, and RAG."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Ahmed Sabry" }]
-keywords = ["mcp", "model-context-protocol", "pentesting", "rag", "offensive-security", "dfir"]
+keywords = ["mcp", "model-context-protocol", "pentesting", "rag", "offensive-security", "red-team", "faiss"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Intended Audience :: Information Technology",
@@ -24,6 +24,10 @@ dependencies = [
 
 [project.scripts]
 dayunhalawa-mcp = "dayunhalawa_mcp.__main__:main"
+rift = "dayunhalawa_mcp.__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["dayunhalawa_mcp*"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
