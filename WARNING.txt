@@ -1,0 +1,44 @@
+================================================================================
+                    OFFENSIVEGX — RESPONSIBLE-USE WARNING
+================================================================================
+
+Project : OffensiveGX (Portable Pentesting RAG)
+Developer: Ahmed Sabry
+
+INTENDED USE (DEFENSIVE / EDUCATIONAL ONLY)
+--------------------------------------------------------------------------------
+OffensiveGX is a retrieval-augmented generation (RAG) knowledge base over a
+pentesting / DFIR dataset. It is provided strictly for:
+
+  * Authorized defensive security testing
+  * Security education and research
+  * Authorized penetration testing on systems YOU OWN or have EXPLICIT
+    WRITTEN PERMISSION to assess
+
+DO NOT USE THIS TOOL TO:
+--------------------------------------------------------------------------------
+  * Access systems, accounts, or data without explicit authorization
+  * Steal, harvest, or crack credentials
+  * Exfiltrate data from systems you do not own
+  * Conduct fraud, phishing, social engineering, or any activity that
+    defeats security controls without permission
+  * Deploy ransomware, wipers, botnets, RATs, or other malware
+  * Cause denial of service, disruption, or damage to any system
+
+LEGAL NOTICE
+--------------------------------------------------------------------------------
+Unauthorized access to computer systems may violate laws including, but not
+limited to, the U.S. Computer Fraud and Abuse Act (CFAA), the UK Computer
+Misuse Act, the EU Directive on attacks against information systems, and
+equivalent legislation in other jurisdictions. Violations can carry criminal
+penalties, fines, and imprisonment.
+
+The developer (Ahmed Sabry) and this project DISCLAIM ALL LIABILITY for any
+misuse, damage, or legal consequences resulting from the use of this software.
+You are solely responsible for ensuring your use complies with all applicable
+laws and the ISC Code of Ethics.
+
+BY USING THIS SOFTWARE, YOU AGREE TO USE IT ONLY FOR AUTHORIZED,
+DEFENSIVE, AND EDUCATIONAL PURPOSES.
+
+================================================================================

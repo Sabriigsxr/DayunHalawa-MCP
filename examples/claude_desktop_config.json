@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "dayunhalawa-mcp": {
+      "command": "/absolute/path/to/DayunHalawa-MCP/.venv/bin/python",
+      "args": ["-m", "dayunhalawa_mcp"],
+      "env": {
+        "DAYUNHALAWA_INDEX_DIR": "/absolute/path/to/DayunHalawa-MCP/index",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      }
+    }
+  }
+}
