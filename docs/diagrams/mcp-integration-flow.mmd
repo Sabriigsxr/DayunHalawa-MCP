@@ -1,0 +1,30 @@
+%% RIFT — MCP integration flow (actual request path)
+%% Two entry points exist: stdio (default, spawned by the client) and
+%% streamable HTTP (localhost only, no built-in authentication).
+
+sequenceDiagram
+    autonumber
+    participant Client as AI client<br/>(OpenCode / Claude Desktop / other)
+    participant Entry as rift_mcp/__main__.py<br/>argparse: --transport stdio|http<br/>--host (127.0.0.1) --port (8787)
+    participant Server as rift_mcp/server.py<br/>MCP server: FastMCP (mcp 1.x)<br/>or MCPServer (mcp 2.x)
+    participant Engine as rift_mcp/engine.py<br/>lazy Engine singleton
+    participant Store as Local files<br/>faiss.index · metadata.jsonl · documents.jsonl
+
+    Client->>Entry: spawn `python -m rift_mcp` (stdio)<br/>or connect to http://127.0.0.1:8787/mcp (HTTP)
+    Entry->>Server: mcp.run(transport=stdio | streamable-http)
+    Server->>Client: initialize handshake; list tools + prompt
+    Client->>Server: call tool search_offensive_scenarios / ask_offensive_scenario / index_stats
+
+    alt first call in this process
+        Server->>Engine: get_engine()
+        Engine->>Store: read + validate index (alignment, counts, dimensions)
+        Store-->>Engine: in-memory FAISS + metadata + documents (read-only)
+        Engine-->>Server: Engine instance cached (thread-safe lazy singleton)
+    else subsequent calls
+        Server->>Engine: reuse cached Engine
+    end
+
+    Engine-->>Server: results (or explicit validation/startup error)
+    Server-->>Client: tool result (JSON or extractive text)
+
+    Note over Client,Store: No API keys, no LLM calls, no shell execution.<br/>HTTP has no authentication — keep it on localhost or behind an access-controlled boundary with TLS.

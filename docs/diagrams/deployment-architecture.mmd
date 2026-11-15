@@ -1,0 +1,38 @@
+%% RIFT — Deployment architecture (single-host, local-first)
+%% No cloud services, no external APIs, no always-on daemon required.
+
+flowchart TB
+    subgraph host["Your machine / lab VM (authorized scope only)"]
+        subgraph env["Python environment (venv)"]
+            PKG["rift-mcp 2.0.0 package<br/>rift_mcp (import) · rift (console script)"]
+            DEPS["mcp · sentence-transformers · faiss-cpu · numpy"]
+        end
+
+        subgraph cache["Model cache"]
+            HF["Hugging Face cache<br/>sentence-transformers/all-MiniLM-L6-v2<br/>auto-detected offline once cached<br/>(HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 to force)"]
+        end
+
+        subgraph store["./index (git-ignored)"]
+            FILES["faiss.index · documents.jsonl · metadata.jsonl<br/>restored by scripts/restore_index.sh<br/>integrity: SHA-256 + path/type checks"]
+        end
+
+        subgraph clients["AI clients on the same host"]
+            A[OpenCode]
+            B[Claude Desktop]
+            C[Other MCP clients]
+        end
+
+        OPT["Optional: Streamable HTTP on 127.0.0.1:8787/mcp<br/>(no auth; loopback only)"]
+    end
+
+    GIT["git clone https://github.com/Sabriigsxr/RIFT.git<br/>(data/index.tar.gz tracked in-repo)"] --> store
+    PKG --> clients
+    FILES --> PKG
+    HF --> PKG
+    A & B & C -- "stdio spawn" --> PKG
+    PKG -. "optional transport" .-> OPT
+
+    NOTE["Boundaries:<br/>- No inbound network exposure required (stdio).<br/>- No cloud accounts, paid APIs, or telemetry.<br/>- The HTTP endpoint is unauthenticated — do not publish it; use localhost or an access-controlled boundary with TLS.<br/>- Index data is read-only at query time."]
+
+    style NOTE fill:#1c1e27,stroke:#d7193f,color:#f2f3f5
+    style OPT fill:#14151c,stroke:#9ca0aa,color:#9ca0aa
