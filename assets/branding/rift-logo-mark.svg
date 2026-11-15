@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">RIFT mark</title>
+  <desc id="desc">Angular crimson R mark for RIFT — Red-team Intelligence and Fusion Toolkit. Transparent background; works on dark and light surfaces.</desc>
+  <g fill="none" stroke="#d7193f" stroke-width="15" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M22 18 H80 L108 46 L80 74 H22 Z"/>
+    <path d="M22 74 V112"/>
+    <path d="M56 74 L116 112"/>
+  </g>
+</svg>

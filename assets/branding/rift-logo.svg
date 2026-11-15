@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 220" role="img" aria-labelledby="title desc">
+  <title id="title">RIFT</title>
+  <desc id="desc">RIFT logo lockup: crimson angular R mark, vertical divider, RIFT wordmark and the Red-team Intelligence and Fusion Toolkit descriptor on charcoal.</desc>
+  <rect width="920" height="220" rx="18" fill="#090a0d"/>
+  <g fill="none" stroke="#d7193f" stroke-width="15" stroke-linecap="square" stroke-linejoin="miter" transform="translate(36,46)">
+    <path d="M22 18 H80 L108 46 L80 74 H22 Z"/>
+    <path d="M22 74 V112"/>
+    <path d="M56 74 L116 112"/>
+  </g>
+  <path d="M212 34 V186" stroke="#d7193f" stroke-width="4"/>
+  <text x="244" y="134" fill="#f2f3f5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="92" font-weight="800" letter-spacing="16">RIFT</text>
+  <text x="246" y="178" fill="#9ca0aa" font-family="Inter, Arial, Helvetica, sans-serif" font-size="16" font-weight="600" letter-spacing="4.2">RED-TEAM INTELLIGENCE &amp; FUSION TOOLKIT</text>
+</svg>
