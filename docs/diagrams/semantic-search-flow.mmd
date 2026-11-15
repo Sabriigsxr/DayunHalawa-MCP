@@ -1,0 +1,38 @@
+%% RIFT — Semantic search flow (rift_mcp/engine.py: Engine.search)
+%% Score = cosine similarity (normalized vectors + inner product).
+
+flowchart TD
+    Q["Query string (from MCP tool call)"]
+
+    subgraph validate["Input validation"]
+        VAL1{"query non-empty string?"}
+        VAL2["top_k: clamp to 1..20<br/>bool rejected; NaN/inf rejected (ValueError)"]
+        VAL3["threshold: clamp to 0.0..1.0<br/>bool rejected; NaN/inf rejected (ValueError)"]
+    end
+
+    ENC["SentenceTransformer.encode([query])<br/>normalize_embeddings=True, float32"]
+    SEARCH["faiss.index.search(q, top_k) — one call<br/>IndexFlatIP → highest inner product first"]
+
+    subgraph perhit["For each (score, idx) slot returned"]
+        IDXCK{"idx == -1?"}
+        THRESH{"score >= threshold?"}
+        MAP["metadata[idx].doc_id → documents[doc_id]<br/>collect result dict"]
+    end
+
+    OUT["Results in FAISS relevance order:<br/>doc_id, score (4dp), category, difficulty,<br/>tags, cve_references, tools_used,<br/>question, answer"]
+
+    Q --> VAL1
+    VAL1 -- no --> ERR1["ValueError: query must be a non-empty string"]
+    VAL1 -- yes --> VAL2 --> VAL3 --> ENC --> SEARCH --> IDXCK
+    IDXCK -- yes, no vector --> NEXT["skip slot"]
+    IDXCK -- no --> THRESH
+    THRESH -- no, below threshold --> NEXT
+    THRESH -- yes --> MAP
+    NEXT --> IDXCK
+    MAP --> IDXCK
+    IDXCK -- all slots processed --> OUT
+
+    NOTE["Threshold default 0.25. Result order = FAISS relevance order (descending inner product).<br/>Load-time validation runs once at engine construction; retrieval is a flat O(n) scan over 23,737 vectors."]
+
+    style NOTE fill:#1c1e27,stroke:#d7193f,color:#f2f3f5
+    style ERR1 fill:#1c1e27,stroke:#d7193f,color:#f04a68

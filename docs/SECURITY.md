@@ -18,3 +18,9 @@ without independent authorization and review.
 
 Report vulnerabilities privately through the process in `SECURITY.md` at the
 repository root. Please do not include live target data in reports.
+
+---
+
+RIFT · Red-team Intelligence & Fusion Toolkit ·
+[Documentation index](README.md) · [GitHub](https://github.com/Sabriigsxr/RIFT) ·
+[Ethical use](ETHICAL_USE.md) · [Security](SECURITY.md)

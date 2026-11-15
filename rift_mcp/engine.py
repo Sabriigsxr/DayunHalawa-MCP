@@ -7,6 +7,7 @@ sentence-transformers model is cached (or present locally).
 from __future__ import annotations
 
 import json
+import math
 import os
 import threading
 from pathlib import Path
@@ -139,8 +140,20 @@ class Engine:
             raise TypeError("top_k must be an integer between 1 and 20")
         if isinstance(threshold, bool):
             raise TypeError("threshold must be a number between 0 and 1")
-        top_k = max(1, min(int(top_k), 20))
-        threshold = float(max(0.0, min(threshold, 1.0)))
+        try:
+            top_k_value = float(top_k)
+        except (TypeError, ValueError):
+            raise ValueError("top_k must be an integer between 1 and 20") from None
+        if not math.isfinite(top_k_value):
+            raise ValueError("top_k must be a finite number between 1 and 20")
+        try:
+            threshold_value = float(threshold)
+        except (TypeError, ValueError):
+            raise ValueError("threshold must be a finite number between 0 and 1") from None
+        if not math.isfinite(threshold_value):
+            raise ValueError("threshold must be a finite number between 0 and 1")
+        top_k = max(1, min(int(top_k_value), 20))
+        threshold = float(max(0.0, min(threshold_value, 1.0)))
         q = self.model.encode(
             [query],
             normalize_embeddings=True,

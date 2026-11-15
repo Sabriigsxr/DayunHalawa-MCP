@@ -20,9 +20,19 @@ if [ -d "$DEST" ] && [ "$FORCE" != "--force" ]; then
   exit 0
 fi
 
+SHA256_TOOL="$(command -v sha256sum || command -v shasum || true)"
+if [ -z "$SHA256_TOOL" ]; then
+  echo "[!] sha256sum or shasum is required for checksum verification" >&2
+  exit 1
+fi
+if [ "$(basename "$SHA256_TOOL")" = "shasum" ]; then
+  ACTUAL="$("$SHA256_TOOL" -a 256 "$ARCHIVE" | awk '{print $1}')"
+else
+  ACTUAL="$("$SHA256_TOOL" "$ARCHIVE" | awk '{print $1}')"
+fi
+
 echo "[*] Verifying checksum..."
 EXPECTED="$(tr -d '[:space:]' < "$SUMS")"
-ACTUAL="$(sha256sum "$ARCHIVE" | awk '{print $1}')"
 if [ "$EXPECTED" != "$ACTUAL" ]; then
   echo "[!] SHA-256 mismatch for $ARCHIVE" >&2
   exit 1
@@ -52,6 +62,10 @@ with tarfile.open(archive, "r:gz") as tar:
             or member.islnk()
         ):
             raise SystemExit(f"unsafe archive member: {member.name}")
+        if not (member.isreg() or member.isdir()):
+            # Reject devices, fifos, and other special entries; the bundled
+            # index contains only regular files and directories.
+            raise SystemExit(f"unsafe archive member type: {member.name}")
 PY
 while IFS= read -r entry; do
   [ "$entry" = "./" ] && continue

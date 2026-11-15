@@ -1,0 +1,64 @@
+%% RIFT — System architecture (actual implementation)
+%% RIFT is a retrieval MCP server: it returns existing Q&A entries, it does not
+%% generate attack plans or execute anything.
+
+flowchart TB
+    subgraph clients["MCP clients (same machine)"]
+        OC[OpenCode]
+        CD[Claude Desktop]
+        ANY[Other MCP-capable clients]
+    end
+
+    subgraph transport["Transport"]
+        STDIO["stdio<br/>(default)"]
+        HTTP["Streamable HTTP<br/>127.0.0.1:8787/mcp<br/>(no built-in auth)"]
+    end
+
+    subgraph rift["RIFT MCP server — python -m rift_mcp"]
+        ENTRY["rift_mcp/__main__.py<br/>CLI entry: --transport stdio|http"]
+        SRV["rift_mcp/server.py<br/>MCP server (mcp 1.x FastMCP / 2.x MCPServer)"]
+
+        subgraph iface["MCP interface"]
+            T1["search_offensive_scenarios(query, top_k, threshold)"]
+            T2["ask_offensive_scenario(question, top_k, threshold)"]
+            T3["index_stats()"]
+            P1["offensive_scenario_brief(topic) prompt"]
+        end
+
+        ENG["rift_mcp/engine.py<br/>lazy Engine singleton<br/>load-time validation"]
+    end
+
+    subgraph data["Local data (read-only at query time)"]
+        FAISS["faiss.index<br/>IndexFlatIP, normalized vectors, 384 dims"]
+        META["metadata.jsonl<br/>doc_id, category, difficulty, tags,<br/>cve_references, tools_used"]
+        DOCS["documents.jsonl<br/>doc_id, question, answer"]
+        MODEL["sentence-transformers/<br/>all-MiniLM-L6-v2<br/>(local cache; offline after 1st load)"]
+    end
+
+    OC --> STDIO
+    CD --> STDIO
+    ANY --> STDIO
+    ANY -. optional .-> HTTP
+
+    STDIO --> ENTRY
+    HTTP --> ENTRY
+    ENTRY --> SRV
+    SRV --> T1
+    SRV --> T2
+    SRV --> T3
+    SRV --> P1
+
+    T1 --> ENG
+    T2 --> ENG
+    T3 --> ENG
+
+    ENG --> MODEL
+    ENG --> FAISS
+    ENG --> META
+    ENG --> DOCS
+
+    NOTE["No network calls at query time once the model is cached.<br/>No LLM generation, no command execution, no shell tools."]
+
+    style NOTE fill:#1c1e27,stroke:#d7193f,color:#f2f3f5
+    style STDIO fill:#14151c,stroke:#d7193f,color:#f2f3f5
+    style HTTP fill:#14151c,stroke:#d7193f,color:#9ca0aa

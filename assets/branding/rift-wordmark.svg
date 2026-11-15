@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-labelledby="title desc">
+  <title id="title">RIFT wordmark</title>
+  <desc id="desc">Typographic RIFT wordmark with descriptor line. Uses currentColor so the artwork adapts to dark and light surfaces.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter" opacity="0.9" transform="translate(0,26) scale(0.72)">
+    <path d="M22 18 H80 L108 46 L80 74 H22 Z"/>
+    <path d="M22 74 V112"/>
+    <path d="M56 74 L116 112"/>
+  </g>
+  <text x="112" y="96" fill="currentColor" font-family="Inter, Arial, Helvetica, sans-serif" font-size="96" font-weight="800" letter-spacing="18">RIFT</text>
+  <text x="114" y="156" fill="currentColor" opacity="0.62" font-family="Inter, Arial, Helvetica, sans-serif" font-size="15" font-weight="600" letter-spacing="4.6">RED-TEAM INTELLIGENCE &amp; FUSION TOOLKIT</text>
+</svg>

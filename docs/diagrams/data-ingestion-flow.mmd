@@ -1,0 +1,30 @@
+%% RIFT — Data ingestion and index build flow (scripts/build_index.py)
+%% Build only from datasets you are authorized to use.
+
+flowchart LR
+    SRC["Authorized documents.jsonl<br/>{doc_id, question, answer, ...}"]
+
+    subgraph build["scripts/build_index.py"]
+        V1["Validate each line:<br/>UTF-8 JSON object,<br/>non-empty unique doc_id,<br/>question or answer required"]
+        V2["Duplicate doc_id detection"]
+        EMB["SentenceTransformer<br/>encode(question + '\\n' + answer)<br/>normalize_embeddings=True<br/>float32"]
+        IDX["FAISS IndexFlatIP<br/>inner-product over normalized<br/>= cosine similarity"]
+        OUT["Write aligned artifacts:<br/>faiss.index · documents.jsonl<br/>metadata.jsonl (same line order)"]
+    end
+
+    subgraph bundle["Bundled artifact (this repository)"]
+        TAR["data/index.tar.gz (tracked)<br/>+ data/index.tar.gz.sha256"]
+        RESTORE["scripts/restore_index.sh<br/>SHA-256 check → member-path check<br/>→ member-type check → extract to ./index<br/>(atomic, refuses symlinks/overwrite unless --force)"]
+    end
+
+    subgraph runtime["Runtime load (rift_mcp/engine.py)"]
+        LD["Validate before answering:<br/>1) all three files exist<br/>2) every JSONL line is an object<br/>3) unique doc_ids<br/>4) ntotal(FAISS) == len(metadata.jsonl)<br/>5) every metadata doc_id maps to a document<br/>6) model dimension == index dimension"]
+    end
+
+    SRC --> V1 --> V2 --> EMB --> IDX --> OUT
+    OUT --> TAR
+    TAR --> RESTORE --> LD
+
+    NOTE["RIFT never rebuilds or replaces the bundled index automatically.<br/>To rebuild: scripts/build_index.py --documents … --out … (use --force only to overwrite a populated dir)."]
+
+    style NOTE fill:#1c1e27,stroke:#d7193f,color:#f2f3f5

@@ -14,6 +14,14 @@ The loader validates:
 5. Every metadata ID maps to one document.
 6. The embedding model dimension equals the FAISS index dimension.
 
-These checks do not judge the truth or safety of retrieved text. The data is
-reference material and must be reviewed in its authorization and operational
-context before use.
+Query-time validation: `query` must be a non-empty string; `top_k` and
+`threshold` reject booleans and NaN/±inf, then clamp to 1–20 and 0.0–1.0
+respectively; non-numeric inputs raise `ValueError`. These checks do not judge
+the truth or safety of retrieved text. The data is reference material and
+must be reviewed in its authorization and operational context before use.
+
+---
+
+RIFT · Red-team Intelligence & Fusion Toolkit ·
+[Documentation index](README.md) · [GitHub](https://github.com/Sabriigsxr/RIFT) ·
+[Ethical use](ETHICAL_USE.md) · [Security](SECURITY.md)

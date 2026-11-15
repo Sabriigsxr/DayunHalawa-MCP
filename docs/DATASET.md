@@ -24,3 +24,9 @@ The builder validates records and refuses to overwrite a populated output
 directory unless `--force` is explicitly supplied. Dataset provenance,
 redistribution rights, and content quality remain the responsibility of the
 index owner; the repository currently has no dataset license statement.
+
+---
+
+RIFT · Red-team Intelligence & Fusion Toolkit ·
+[Documentation index](README.md) · [GitHub](https://github.com/Sabriigsxr/RIFT) ·
+[Ethical use](ETHICAL_USE.md) · [Security](SECURITY.md)
