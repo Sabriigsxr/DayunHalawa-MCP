@@ -1,0 +1,9 @@
+flowchart LR
+    C["MCP client"] -->|stdio / localhost HTTP| S["RIFT MCP server"]
+    S --> T["search · ask · stats"]
+    T --> E["local embedding"]
+    E --> F["FAISS IndexFlatIP"]
+    F --> D["aligned metadata + documents"]
+    D --> R["grounded JSON / extractive text"]
+    R --> C
+    N["No shell tools\nNo generation\nNo query-time network"] -.-> S
