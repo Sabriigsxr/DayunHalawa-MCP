@@ -13,6 +13,11 @@ renderer (GitHub renders Mermaid natively; `mmdc` for CLI export).
 | [`mcp-integration-flow.mmd`](mcp-integration-flow.mmd) | Real request path over stdio and HTTP, including lazy engine load | [`../MCP_INTEGRATION.md`](../MCP_INTEGRATION.md) |
 | [`deployment-architecture.mmd`](deployment-architecture.mmd) | Single-host local-first deployment and its boundaries | [`../../README.md`](../../README.md) |
 
+Rendered exports are available in [`rendered/`](rendered/):
+`system-architecture.svg`, `data-ingestion-flow.svg`,
+`semantic-search-flow.svg`, `mcp-integration-flow.svg`, and
+`deployment-architecture.svg`.
+
 All diagrams describe the **actual implementation** in `rift_mcp/`,
 `scripts/`, and `data/` — they do not depict unimplemented features, and RIFT
 is not an autonomous exploitation engine.

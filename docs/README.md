@@ -17,6 +17,13 @@ artifacts — nothing here describes vaporware.
 | Looking for real command examples | [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) |
 | Something broke | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) |
 
+## Visual path
+
+Start with the [visual learning path](visual-guide/LEARNING_PATH.md) for a
+three-level introduction, or use the [product presentation](presentation/RIFT_PRODUCT_OVERVIEW.md)
+for a concise product tour. The visual pages explain the implemented
+retrieval/MCP boundary without presenting RIFT as an execution framework.
+
 ## How it works (intermediate and advanced)
 
 | Page | Audience |
